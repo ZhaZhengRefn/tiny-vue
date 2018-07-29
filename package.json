@@ -1,0 +1,19 @@
+{
+  "name": "tiny-vue",
+  "version": "1.0.0",
+  "description": "mock vue",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZhaZhengRefn/tiny-vue.git"
+  },
+  "author": "zheng_refn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ZhaZhengRefn/tiny-vue/issues"
+  },
+  "homepage": "https://github.com/ZhaZhengRefn/tiny-vue#readme"
+}
