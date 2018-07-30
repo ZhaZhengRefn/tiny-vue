@@ -8,7 +8,7 @@ import Dep from "./dep";
 class Observer {
   constructor(value) {
     this.value = value
-    // this.dep = new Dep()
+    this.dep = new Dep()
     this.walk(this.value)
   }
 
@@ -22,21 +22,21 @@ class Observer {
 export const defineReactive = function (obj, key, val) {
   const dep = new Dep()//此处为当前键值对的依赖收集器
 
-  // let childOb = observe(val) //递归调用observe，若不为对象则会return
+  let childOb = observe(val) //递归调用observe，若不为对象则会return
 
   Object.defineProperty(obj, key, {
     get() {
       if (Dep.target) {
         dep.depend()
-        // if (childOb) {
-        //   childOb.dep.depend()
-        // }
+        if (childOb) {
+          childOb.dep.depend()
+        }
       }
       return val
     },
     set(newVal) {
       val = newVal
-      // childOb = observe(val)
+      childOb = observe(val)
       dep.notify()
       return val
     }
