@@ -4,7 +4,7 @@
   "description": "mock vue",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "ENV=development node ./build/build.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/ZhaZhengRefn/tiny-vue/issues"
   },
-  "homepage": "https://github.com/ZhaZhengRefn/tiny-vue#readme"
+  "homepage": "https://github.com/ZhaZhengRefn/tiny-vue#readme",
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.3",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.7.0",
+    "rollup": "^0.63.4",
+    "rollup-plugin-babel": "^3.0.7"
+  }
 }
