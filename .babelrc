@@ -7,5 +7,11 @@
       }
     }]
   ],
-  "plugins": ["external-helpers"]
+  "plugins": [
+    "external-helpers",
+    ["module-alias", [
+      { "src": "./shared", "expose": "shared" },
+      { "src": "./src", "expose": "src" }
+    ]]    
+  ]
 }

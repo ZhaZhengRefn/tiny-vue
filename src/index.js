@@ -1,3 +1,8 @@
-export default function() {
-  console.log(11111)
-}
+import TinyVue from './instance/index'
+import {
+  initGlobalAPI,
+} from './global-api/index'
+
+initGlobalAPI(TinyVue)
+
+export default TinyVue
