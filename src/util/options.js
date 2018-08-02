@@ -4,6 +4,9 @@ import {
   chain,
 } from 'shared/util'
 import {
+  LIFECYCLE_HOOKS,
+} from 'shared/constant'
+import {
   warn
 } from './debug'
 import {
@@ -117,7 +120,7 @@ const mergeHookChain = chain(
 export const mergeHook = function (parentVal, childVal) {
   return mergeHookChain(parentVal, childVal)
 }
-
+// TODO:需要实现extend自测parentVal是否一定为array
 LIFECYCLE_HOOKS.forEach(hook => {
   strats[hook] = mergeHook
 })

@@ -19,7 +19,13 @@ export const after = function (fn, afterFn) {
   }
 }
 
-export const chain = function (fns) {
+export const chain = function (...args) {
+  let fns = []
+  if (Array.isArray(args[0]) && args.length === 1) {
+    fns = args[0]
+  } else {
+    fns = args
+  }
   return fns.reduce((pre, next) => {
     return after(pre, next)
   })
