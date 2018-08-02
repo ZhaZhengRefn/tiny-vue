@@ -9,9 +9,11 @@
   <script src="../dist/index.js"></script>  
   <script>
     const instance = new TinyVue({
-      foo: 'bar'
+      foo: 'bar',
+      created() {
+        console.log('instance - created')
+      }
     })
-    console.log(instance);
   </script>
 </body>
 </html>

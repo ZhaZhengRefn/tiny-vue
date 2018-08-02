@@ -1,7 +1,11 @@
 import {
   hasOwn,
   getDataOrFn,
+  chain,
 } from 'shared/util'
+import {
+  LIFECYCLE_HOOKS,
+} from 'shared/constant'
 import {
   warn
 } from './debug'
@@ -40,6 +44,7 @@ const defaultStrat = function (parentVal, childVal) {
   return childVal == null ? parentVal : childVal
 }
 
+// ? 1.el propsData合并策略
 if (process.env.NODE_ENV !== 'production') {
   strats.el = strats.propsData = function (parent, child, vm, key) {
     if (!vm) {
@@ -52,6 +57,7 @@ if (process.env.NODE_ENV !== 'production') {
   }
 }
 
+// ? 2.data合并策略
 strats.data = function (parentVal, childVal, vm) {
   //子组件策略
   if (!vm && (childVal && typeof childVal !== 'function')) {
@@ -86,6 +92,38 @@ function mergeDataOrFn(parentVal, childVal, vm) {
     }
   }
 }
+
+// ? 3.hook合并
+const hasChild = function(parent, child) {
+  if (!child) {
+    return parent
+  }
+  return false
+}
+const hasParent = function(parent, child) {
+  if (parent) {
+    return parent.concat(child)
+  }
+  return false
+}
+const isChildArray = function(parent, child) {
+  if (Array.isArray(child)) {
+    return child
+  }
+  return [child]
+}
+const mergeHookChain = chain(
+  hasChild,
+  hasParent,
+  isChildArray,
+)
+export const mergeHook = function (parentVal, childVal) {
+  return mergeHookChain(parentVal, childVal)
+}
+// TODO:需要实现extend自测parentVal是否一定为array
+LIFECYCLE_HOOKS.forEach(hook => {
+  strats[hook] = mergeHook
+})
 
 export const mergeOptions = function (parent, child, vm) {
   // 校验子组件的组件名
