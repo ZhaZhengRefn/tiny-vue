@@ -2,9 +2,12 @@ import {
   hasOwn,
   getDataOrFn,
   chain,
+  isPlainObject,
+  extend,
 } from 'shared/util'
 import {
   LIFECYCLE_HOOKS,
+  ASSET_TYPES,
 } from 'shared/constant'
 import {
   warn
@@ -93,20 +96,36 @@ function mergeDataOrFn(parentVal, childVal, vm) {
   }
 }
 
+function mergeData(to, from) {
+  if (!from) return to
+  let key, toVal, fromVal
+  const keys = Object.keys(from)
+  for (let i = 0; i < keys.length; i++) {
+    key = keys[i]
+    toVal = to[key]
+    fromVal = from[key]
+    if (!hasOwn(to, key)){
+      set(to, key, fromVal)//TODO: set to value with reactive
+    } else if (isPlainObject(toVal) && isPlainObject(fromVal)){
+      mergeData(toVal, fromVal)
+    }
+  }
+}
+
 // ? 3.hook合并
-const hasChild = function(parent, child) {
+const hasChild = function (parent, child) {
   if (!child) {
     return parent
   }
   return false
 }
-const hasParent = function(parent, child) {
+const hasParent = function (parent, child) {
   if (parent) {
     return parent.concat(child)
   }
   return false
 }
-const isChildArray = function(parent, child) {
+const isChildArray = function (parent, child) {
   if (Array.isArray(child)) {
     return child
   }
@@ -123,6 +142,19 @@ export const mergeHook = function (parentVal, childVal) {
 // TODO:需要实现extend自测parentVal是否一定为array
 LIFECYCLE_HOOKS.forEach(hook => {
   strats[hook] = mergeHook
+})
+
+// ? 4.merge assets
+//以parentVal为原型，extend childVal。因此虽然子组件没有声明内置组件，但是在子组件的模板中仍然可以使用。例如keep-alive，transition
+const mergeAssets = function(parentVal, childVal) {
+  const res = Object.create(parentVal || null)
+  if (childVal) {
+    return extend(res, childVal)
+  }
+  return res
+}
+ASSET_TYPES.forEach(asset => {
+  strats[asset + 's'] = mergeAssets
 })
 
 export const mergeOptions = function (parent, child, vm) {

@@ -11,3 +11,9 @@ export const LIFECYCLE_HOOKS = [
   'deactivated',
   'errorCaptured'
 ]
+
+export const ASSET_TYPES = [
+  'component',
+  'directive',
+  'filter'
+]
