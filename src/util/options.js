@@ -4,6 +4,7 @@ import {
   chain,
   isPlainObject,
   extend,
+  nativeWatch,
 } from 'shared/util'
 import {
   LIFECYCLE_HOOKS,
@@ -156,6 +157,36 @@ const mergeAssets = function(parentVal, childVal) {
 ASSET_TYPES.forEach(asset => {
   strats[asset + 's'] = mergeAssets
 })
+
+// ? 5.merge watch
+const mergeWatch = function(parentVal, childVal, vm, key) {
+  // 去除firefox中Object.prototype.watch的影响
+  if (parentVal === nativeWatch) parentVal = undefined
+  if (childVal === nativeWatch) childVal = undefined
+
+  // 不存在子值时返回以父值为原型的对象
+  if (!childVal) return Object.create(parentVal || null)
+  // 不存在父值时返回子值
+  if (!parentVal) return childVal
+  // 父子值均存在时合并
+  const ret = {}
+  // 将父值包括原型链上的key复制至ret实例上
+  extend(ret, parentVal)
+  for(const key in childVal) {
+    let parent = ret[key]
+    // 存在parent时转换为数组包裹形式
+    if (parent && !Array.isArray(parent)) {
+      parent = [parent]
+    }
+    ret[key] = parent
+      ? parent.concat(child)
+      : Array.isArray(parent)
+        ? child
+        : [child]
+  }
+  return ret
+}
+strats.watch = mergeWatch
 
 export const mergeOptions = function (parent, child, vm) {
   // 校验子组件的组件名
