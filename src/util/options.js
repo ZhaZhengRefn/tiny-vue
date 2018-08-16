@@ -159,6 +159,7 @@ ASSET_TYPES.forEach(asset => {
 })
 
 // ? 5.merge watch
+// 子类的watch与实例的watch合并后均被执行
 const mergeWatch = function(parentVal, childVal, vm, key) {
   // 去除firefox中Object.prototype.watch的影响
   if (parentVal === nativeWatch) parentVal = undefined
