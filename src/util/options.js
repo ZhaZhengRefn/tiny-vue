@@ -189,6 +189,20 @@ const mergeWatch = function(parentVal, childVal, vm, key) {
 }
 strats.watch = mergeWatch
 
+// ? 6. 合并props、methods、inject、computed
+strats.props = 
+strats.methods = 
+strats.inject = 
+strats.computed = function(parentVal, childVal) {
+  if (!parentVal) return childVal
+  const ret = Object.create(null)
+  extend(ret, parentVal)
+  if (childVal) {
+    extend(ret, childVal)
+  }
+  return ret
+}
+
 export const mergeOptions = function (parent, child, vm) {
   // 校验子组件的组件名
   if (process.env.NODE_ENV !== 'production') {
